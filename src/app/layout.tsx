@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Macro Discovery Assessment",
-  description: "Complete your discovery self-form assessment",
+  title: "Socio-demographic & Background Form",
+  description: "Section 1 — complete all 35 questions",
 };
 
 export default function RootLayout({

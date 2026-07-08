@@ -1,15 +1,12 @@
 /**
- * Google Apps Script — Macro Discovery Form Backend
+ * Google Apps Script — Socio-demographic Form Backend
  *
- * SETUP INSTRUCTIONS:
- * 1. Create a new Google Sheet
- * 2. Go to Extensions → Apps Script
- * 3. Paste this entire file into Code.gs
- * 4. Run `setupSheet` once (authorize when prompted)
- * 5. Deploy → New deployment → Web app
- *    - Execute as: Me
- *    - Who has access: Anyone
- * 6. Copy the Web App URL into your Vercel env: NEXT_PUBLIC_GOOGLE_SCRIPT_URL
+ * SETUP:
+ * 1. Create a Google Sheet
+ * 2. Extensions → Apps Script → paste this file
+ * 3. Run setupSheet once
+ * 4. Deploy → Web app (Execute as: Me, Access: Anyone)
+ * 5. Set NEXT_PUBLIC_GOOGLE_SCRIPT_URL in Vercel
  */
 
 const SHEET_NAME = "Submissions";
@@ -24,43 +21,46 @@ function setupSheet() {
 
   const headers = [
     "Timestamp",
-    "Email",
-    "Full Name",
-    "Company",
-    "Job Title",
-    "Work Email",
-    "Phone",
-    "LinkedIn",
-    "Website",
-    "Employees",
-    "Annual Revenue",
-    "Industry",
-    "Business Goals",
-    "Challenges",
-    "Marketing Strategy",
-    "Marketing Channels",
-    "Marketing Satisfaction",
-    "Monthly Budget",
-    "Hear About Us",
-    "Services Interested",
+    "Age",
+    "Gender",
+    "Occupation",
+    "Education",
+    "Marital Status",
+    "Household Income",
+    "Household Size",
+    "Primary Language",
+    "Chronic Health Conditions",
+    "Current Health Status",
+    "Exercise Frequency",
+    "Sleep Hours (1-10)",
+    "Do You Smoke",
+    "Alcohol Consumption",
     "Preferred Communication",
-    "Preferred Call Time",
-    "Project Deadline",
-    "Additional Info",
-    "Business Stage",
-    "Target Audience",
-    "Competitors",
-    "USP",
-    "Track Performance",
-    "Dedicated Marketing Team",
-    "Marketing Pain Point",
-    "Desired Outcome",
-    "Working With Agencies",
-    "Project Budget",
-    "Start Timeline",
-    "Is Decision Maker",
-    "Decision Maker Name",
-    "Other Comments",
+    "Communication Other",
+    "Health Insurance Satisfaction (1-5)",
+    "Health Information Source",
+    "Doctor Checkup Frequency",
+    "Social Media Platforms",
+    "Social Media Other",
+    "Favorite Hobby",
+    "Hobby Hours Per Week",
+    "Product Choice Factor",
+    "Own Pets",
+    "Preferred Transportation",
+    "Transportation Other",
+    "Leisure Travel Frequency",
+    "Professional Organizations",
+    "Trusted News Sources",
+    "Trusted News Other",
+    "Favorite Cuisine",
+    "Cuisine Other",
+    "Eat Out Frequency",
+    "Cook Or Takeout",
+    "Internet Hours Per Day",
+    "Primary Internet Device",
+    "Smart Home Devices",
+    "Shop Online Frequency",
+    "Primary Online Shopping Reason",
   ];
 
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -74,56 +74,58 @@ function setupSheet() {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
 
     if (!sheet) {
       setupSheet();
+      sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
     }
-
-    const targetSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
 
     const row = [
       data.submittedAt || new Date().toISOString(),
-      data.email || "",
-      data.fullName || "",
-      data.company || "",
-      data.jobTitle || "",
-      data.workEmail || "",
-      data.phone || "",
-      data.linkedin || "",
-      data.website || "",
-      data.employees || "",
-      data.annualRevenue || "",
-      data.industry || "",
-      data.businessGoals || "",
-      data.challenges || "",
-      data.marketingStrategy || "",
-      (data.marketingChannels || []).join(", "),
-      data.marketingSatisfaction || "",
-      data.monthlyBudget || "",
-      data.hearAboutUs || "",
-      (data.servicesInterested || []).join(", "),
+      data.age || "",
+      data.gender || "",
+      data.occupation || "",
+      data.education || "",
+      data.maritalStatus || "",
+      data.householdIncome || "",
+      data.householdSize || "",
+      data.primaryLanguage || "",
+      data.chronicHealthConditions || "",
+      data.currentHealthStatus || "",
+      data.exerciseFrequency || "",
+      data.sleepHours || "",
+      data.doYouSmoke || "",
+      data.alcoholConsumption || "",
       data.preferredCommunication || "",
-      data.preferredCallTime || "",
-      data.projectDeadline || "",
-      data.additionalInfo || "",
-      data.businessStage || "",
-      data.targetAudience || "",
-      data.competitors || "",
-      data.usp || "",
-      data.trackPerformance || "",
-      data.dedicatedMarketingTeam || "",
-      data.marketingPainPoint || "",
-      data.desiredOutcome || "",
-      data.workingWithAgencies || "",
-      data.projectBudget || "",
-      data.startTimeline || "",
-      data.isDecisionMaker || "",
-      data.decisionMakerName || "",
-      data.otherComments || "",
+      data.preferredCommunicationOther || "",
+      data.healthInsuranceSatisfaction || "",
+      data.healthInformationSource || "",
+      data.doctorCheckupFrequency || "",
+      (data.socialMediaPlatforms || []).join(", "),
+      data.socialMediaOther || "",
+      data.favoriteHobby || "",
+      data.hobbyHoursPerWeek || "",
+      data.productChoiceFactor || "",
+      data.ownPets || "",
+      data.preferredTransportation || "",
+      data.transportationOther || "",
+      data.leisureTravelFrequency || "",
+      data.professionalOrganizations || "",
+      (data.trustedNewsSources || []).join(", "),
+      data.trustedNewsOther || "",
+      data.favoriteCuisine || "",
+      data.cuisineOther || "",
+      data.eatOutFrequency || "",
+      data.cookOrTakeout || "",
+      data.internetHoursPerDay || "",
+      data.primaryInternetDevice || "",
+      data.smartHomeDevices || "",
+      data.shopOnlineFrequency || "",
+      data.primaryOnlineShoppingReason || "",
     ];
 
-    targetSheet.appendRow(row);
+    sheet.appendRow(row);
 
     return ContentService
       .createTextOutput(JSON.stringify({ success: true }))
@@ -137,6 +139,6 @@ function doPost(e) {
 
 function doGet() {
   return ContentService
-    .createTextOutput(JSON.stringify({ status: "Macro Discovery Form API is running" }))
+    .createTextOutput(JSON.stringify({ status: "Socio-demographic Form API is running" }))
     .setMimeType(ContentService.MimeType.JSON);
 }

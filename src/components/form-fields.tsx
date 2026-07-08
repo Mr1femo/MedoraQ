@@ -193,3 +193,35 @@ export function ScaleInput({
     </div>
   );
 }
+
+interface SelectInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  options: readonly string[];
+  placeholder?: string;
+  required?: boolean;
+}
+
+export function SelectInput({
+  value,
+  onChange,
+  options,
+  placeholder = "Choose",
+  required,
+}: SelectInputProps) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      required={required}
+      className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-black outline-none transition-all focus:border-brand focus:ring-2 focus:ring-brand/20"
+    >
+      <option value="">{placeholder}</option>
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  );
+}

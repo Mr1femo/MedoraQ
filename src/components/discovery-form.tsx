@@ -9,16 +9,28 @@ import {
   RadioGroup,
   CheckboxGroup,
   ScaleInput,
+  SelectInput,
 } from "@/components/form-fields";
 import {
   type FormData,
   initialFormData,
   FORM_STEPS,
-  MARKETING_CHANNELS,
-  SERVICES,
-  BUSINESS_STAGES,
-  COMMUNICATION_METHODS,
+  TOTAL_QUESTIONS,
+  GENDER_OPTIONS,
+  MARITAL_STATUS,
+  HOUSEHOLD_INCOME,
   YES_NO,
+  HEALTH_STATUS,
+  FREQUENCY_OPTIONS,
+  COMMUNICATION_OPTIONS,
+  HEALTH_INFO_SOURCES,
+  DOCTOR_VISIT_FREQUENCY,
+  SOCIAL_MEDIA_PLATFORMS,
+  TRANSPORTATION_OPTIONS,
+  PROFESSIONAL_ORG_OPTIONS,
+  NEWS_SOURCES,
+  CUISINE_OPTIONS,
+  COOK_OR_TAKEOUT,
 } from "@/lib/form-data";
 import { submitForm } from "@/lib/submit-form";
 
@@ -57,7 +69,7 @@ export default function DiscoveryForm() {
         </div>
         <h2 className="text-3xl font-bold text-black">Thank you!</h2>
         <p className="mt-4 text-black/60">
-          Your discovery assessment has been submitted. We&apos;ll review your responses and be in touch soon.
+          Your responses have been submitted successfully. We&apos;ll be in touch soon.
         </p>
       </div>
     );
@@ -65,7 +77,6 @@ export default function DiscoveryForm() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
       <header className="border-b border-black/5 bg-white">
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-6 sm:px-6">
           <Image
@@ -78,14 +89,13 @@ export default function DiscoveryForm() {
           />
           <div>
             <h1 className="text-xl font-bold tracking-tight text-black sm:text-2xl">
-              Macro Discovery Assessment
+              Section 1 — Socio-demographic and Background
             </h1>
-            <p className="text-sm text-black/50">Self-Form Assessment</p>
+            <p className="text-sm text-black/50">{TOTAL_QUESTIONS} questions</p>
           </div>
         </div>
       </header>
 
-      {/* Progress */}
       <div className="border-b border-black/5 bg-white">
         <div className="mx-auto max-w-3xl px-4 py-5 sm:px-6">
           <div className="mb-3 flex items-center justify-between text-sm">
@@ -113,7 +123,6 @@ export default function DiscoveryForm() {
         </div>
       </div>
 
-      {/* Form */}
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-black">{currentStep.title}</h2>
@@ -133,94 +142,76 @@ export default function DiscoveryForm() {
         >
           {step === 1 && (
             <>
-              <FormField label="Email" required>
+              <FormField label="1. What is your age?" required>
                 <TextInput
-                  type="email"
-                  value={data.email}
-                  onChange={(v) => update("email", v)}
-                  placeholder="your@email.com"
+                  type="number"
+                  value={data.age}
+                  onChange={(v) => update("age", v)}
+                  placeholder="Enter your age"
                   required
                 />
               </FormField>
-              <FormField label="Full Name" required>
+
+              <FormField label="2. What is your gender?" required>
+                <RadioGroup
+                  name="gender"
+                  options={GENDER_OPTIONS}
+                  value={data.gender}
+                  onChange={(v) => update("gender", v)}
+                />
+              </FormField>
+
+              <FormField label="3. What is your current occupation? (e.g., student, worker)" required>
                 <TextInput
-                  value={data.fullName}
-                  onChange={(v) => update("fullName", v)}
-                  placeholder="John Doe"
+                  value={data.occupation}
+                  onChange={(v) => update("occupation", v)}
+                  placeholder="e.g. Student, Engineer, Teacher..."
                   required
                 />
               </FormField>
-              <FormField label="What company do you work for?" required>
+
+              <FormField label="4. What is your highest level of education?" required>
                 <TextInput
-                  value={data.company}
-                  onChange={(v) => update("company", v)}
-                  placeholder="Company name"
+                  value={data.education}
+                  onChange={(v) => update("education", v)}
+                  placeholder="e.g. High school, Bachelor's, Master's..."
                   required
                 />
               </FormField>
-              <FormField label="What is your job title / role?" required>
+
+              <FormField label="5. What is your marital status?" required>
+                <RadioGroup
+                  name="maritalStatus"
+                  options={MARITAL_STATUS}
+                  value={data.maritalStatus}
+                  onChange={(v) => update("maritalStatus", v)}
+                />
+              </FormField>
+
+              <FormField label="6. What is your household's monthly income (in USD)?" required>
+                <RadioGroup
+                  name="householdIncome"
+                  options={HOUSEHOLD_INCOME}
+                  value={data.householdIncome}
+                  onChange={(v) => update("householdIncome", v)}
+                />
+              </FormField>
+
+              <FormField label="7. How many people live in your household?" required>
                 <TextInput
-                  value={data.jobTitle}
-                  onChange={(v) => update("jobTitle", v)}
-                  placeholder="e.g. Marketing Director"
+                  type="number"
+                  value={data.householdSize}
+                  onChange={(v) => update("householdSize", v)}
+                  placeholder="Number of people"
                   required
                 />
               </FormField>
-              <FormField label="What is your work email address?" required>
+
+              <FormField label="8. What is your primary language spoken at home?" required>
                 <TextInput
-                  type="email"
-                  value={data.workEmail}
-                  onChange={(v) => update("workEmail", v)}
-                  placeholder="work@company.com"
-                  required
-                />
-              </FormField>
-              <FormField label="What is your phone number?" required>
-                <TextInput
-                  type="tel"
-                  value={data.phone}
-                  onChange={(v) => update("phone", v)}
-                  placeholder="+1 (555) 000-0000"
-                  required
-                />
-              </FormField>
-              <FormField label="What is your LinkedIn profile URL?">
-                <TextInput
-                  type="url"
-                  value={data.linkedin}
-                  onChange={(v) => update("linkedin", v)}
-                  placeholder="https://linkedin.com/in/..."
-                />
-              </FormField>
-              <FormField label="What is your company's website URL?">
-                <TextInput
-                  type="url"
-                  value={data.website}
-                  onChange={(v) => update("website", v)}
-                  placeholder="https://..."
-                />
-              </FormField>
-              <div className="grid gap-6 sm:grid-cols-2">
-                <FormField label="How many employees does your company have?">
-                  <TextInput
-                    value={data.employees}
-                    onChange={(v) => update("employees", v)}
-                    placeholder="e.g. 50"
-                  />
-                </FormField>
-                <FormField label="What is your company's annual revenue?">
-                  <TextInput
-                    value={data.annualRevenue}
-                    onChange={(v) => update("annualRevenue", v)}
-                    placeholder="e.g. $1M - $5M"
-                  />
-                </FormField>
-              </div>
-              <FormField label="What industry is your company in?" required>
-                <TextInput
-                  value={data.industry}
-                  onChange={(v) => update("industry", v)}
-                  placeholder="e.g. Technology, Healthcare..."
+                  value={data.primaryLanguage}
+                  onChange={(v) => update("primaryLanguage", v)}
+                  placeholder="e.g. English, Arabic, Spanish..."
                   required
                 />
               </FormField>
@@ -229,30 +220,111 @@ export default function DiscoveryForm() {
 
           {step === 2 && (
             <>
-              <FormField label="What are your primary business goals for the next 12 months?" required>
-                <TextArea
-                  value={data.businessGoals}
-                  onChange={(v) => update("businessGoals", v)}
-                  placeholder="Describe your key objectives..."
-                  rows={5}
+              <FormField label="9. Do you have any chronic health conditions?" required>
+                <RadioGroup
+                  name="chronicHealthConditions"
+                  options={YES_NO}
+                  value={data.chronicHealthConditions}
+                  onChange={(v) => update("chronicHealthConditions", v)}
+                />
+              </FormField>
+
+              <FormField label="10. What is your current health status?" required>
+                <RadioGroup
+                  name="currentHealthStatus"
+                  options={HEALTH_STATUS}
+                  value={data.currentHealthStatus}
+                  onChange={(v) => update("currentHealthStatus", v)}
+                />
+              </FormField>
+
+              <FormField label="11. How often do you exercise?" required>
+                <RadioGroup
+                  name="exerciseFrequency"
+                  options={FREQUENCY_OPTIONS}
+                  value={data.exerciseFrequency}
+                  onChange={(v) => update("exerciseFrequency", v)}
+                />
+              </FormField>
+
+              <FormField
+                label="12. How many hours of sleep do you get on average per night?"
+                required
+              >
+                <ScaleInput
+                  min={1}
+                  max={10}
+                  value={data.sleepHours}
+                  onChange={(v) => update("sleepHours", v)}
+                  lowLabel="1 = Very little"
+                  highLabel="10 = A lot"
+                />
+              </FormField>
+
+              <FormField label="13. Do you smoke?" required>
+                <RadioGroup
+                  name="doYouSmoke"
+                  options={YES_NO}
+                  value={data.doYouSmoke}
+                  onChange={(v) => update("doYouSmoke", v)}
+                />
+              </FormField>
+
+              <FormField label="14. How often do you consume alcohol?" required>
+                <RadioGroup
+                  name="alcoholConsumption"
+                  options={FREQUENCY_OPTIONS}
+                  value={data.alcoholConsumption}
+                  onChange={(v) => update("alcoholConsumption", v)}
+                />
+              </FormField>
+
+              <FormField label="15. What is your preferred method of communication?" required>
+                <RadioGroup
+                  name="preferredCommunication"
+                  options={COMMUNICATION_OPTIONS}
+                  value={data.preferredCommunication}
+                  onChange={(v) => update("preferredCommunication", v)}
+                />
+                {data.preferredCommunication === "Other" && (
+                  <div className="mt-3">
+                    <TextInput
+                      value={data.preferredCommunicationOther}
+                      onChange={(v) => update("preferredCommunicationOther", v)}
+                      placeholder="Please specify"
+                    />
+                  </div>
+                )}
+              </FormField>
+
+              <FormField
+                label="16. How satisfied are you with your current health insurance coverage?"
+                required
+              >
+                <ScaleInput
+                  min={1}
+                  max={5}
+                  value={data.healthInsuranceSatisfaction}
+                  onChange={(v) => update("healthInsuranceSatisfaction", v)}
+                  lowLabel="1 = Very dissatisfied"
+                  highLabel="5 = Very satisfied"
+                />
+              </FormField>
+
+              <FormField label="17. What is your primary source of health information?" required>
+                <SelectInput
+                  value={data.healthInformationSource}
+                  onChange={(v) => update("healthInformationSource", v)}
+                  options={HEALTH_INFO_SOURCES}
                   required
                 />
               </FormField>
-              <FormField label="What are the main challenges you are currently facing in your business?" required>
-                <TextArea
-                  value={data.challenges}
-                  onChange={(v) => update("challenges", v)}
-                  placeholder="Share your biggest obstacles..."
-                  rows={5}
-                  required
-                />
-              </FormField>
-              <FormField label="How would you describe your current marketing strategy?" required>
-                <TextArea
-                  value={data.marketingStrategy}
-                  onChange={(v) => update("marketingStrategy", v)}
-                  placeholder="Tell us about your approach..."
-                  rows={5}
+
+              <FormField label="18. How often do you visit a doctor for a check-up?" required>
+                <SelectInput
+                  value={data.doctorCheckupFrequency}
+                  onChange={(v) => update("doctorCheckupFrequency", v)}
+                  options={DOCTOR_VISIT_FREQUENCY}
                   required
                 />
               </FormField>
@@ -261,199 +333,203 @@ export default function DiscoveryForm() {
 
           {step === 3 && (
             <>
-              <FormField label="What marketing channels are you currently using?" hint="Select all that apply">
+              <FormField
+                label="19. Which of the following social media platforms do you use?"
+                hint="Check all that apply"
+              >
                 <CheckboxGroup
-                  options={MARKETING_CHANNELS}
-                  values={data.marketingChannels}
-                  onChange={(v) => update("marketingChannels", v)}
+                  options={SOCIAL_MEDIA_PLATFORMS}
+                  values={data.socialMediaPlatforms}
+                  onChange={(v) => update("socialMediaPlatforms", v)}
                 />
+                {data.socialMediaPlatforms.includes("Other") && (
+                  <div className="mt-3">
+                    <TextInput
+                      value={data.socialMediaOther}
+                      onChange={(v) => update("socialMediaOther", v)}
+                      placeholder="Other platform(s)"
+                    />
+                  </div>
+                )}
               </FormField>
-              <FormField label="How satisfied are you with your current marketing results?" required>
-                <ScaleInput
-                  min={1}
-                  max={10}
-                  value={data.marketingSatisfaction}
-                  onChange={(v) => update("marketingSatisfaction", v)}
-                  lowLabel="Not satisfied"
-                  highLabel="Very satisfied"
-                />
-              </FormField>
-              <FormField label="What is your monthly marketing budget?" required>
+
+              <FormField label="20. What is your favorite hobby or leisure activity?" required>
                 <TextInput
-                  value={data.monthlyBudget}
-                  onChange={(v) => update("monthlyBudget", v)}
-                  placeholder="e.g. $5,000"
+                  value={data.favoriteHobby}
+                  onChange={(v) => update("favoriteHobby", v)}
+                  placeholder="Your favorite hobby"
                   required
                 />
               </FormField>
-              <FormField label="How did you hear about us?">
+
+              <FormField label="21. How many hours a week do you spend on your hobby?" required>
                 <TextInput
-                  value={data.hearAboutUs}
-                  onChange={(v) => update("hearAboutUs", v)}
-                  placeholder="Referral, social media, search..."
+                  type="number"
+                  value={data.hobbyHoursPerWeek}
+                  onChange={(v) => update("hobbyHoursPerWeek", v)}
+                  placeholder="Hours per week"
+                  required
                 />
+              </FormField>
+
+              <FormField label="22. What is the most important factor when choosing a new product?" required>
+                <TextInput
+                  value={data.productChoiceFactor}
+                  onChange={(v) => update("productChoiceFactor", v)}
+                  placeholder="e.g. Price, quality, brand..."
+                  required
+                />
+              </FormField>
+
+              <FormField label="23. Do you own any pets?" required>
+                <TextInput
+                  value={data.ownPets}
+                  onChange={(v) => update("ownPets", v)}
+                  placeholder="e.g. Yes — 2 dogs, No..."
+                  required
+                />
+              </FormField>
+
+              <FormField label="24. What is your preferred mode of transportation?" required>
+                <RadioGroup
+                  name="preferredTransportation"
+                  options={TRANSPORTATION_OPTIONS}
+                  value={data.preferredTransportation}
+                  onChange={(v) => update("preferredTransportation", v)}
+                />
+                {data.preferredTransportation === "Other" && (
+                  <div className="mt-3">
+                    <TextInput
+                      value={data.transportationOther}
+                      onChange={(v) => update("transportationOther", v)}
+                      placeholder="Please specify"
+                    />
+                  </div>
+                )}
+              </FormField>
+
+              <FormField label="25. How often do you travel for leisure?" required>
+                <TextInput
+                  value={data.leisureTravelFrequency}
+                  onChange={(v) => update("leisureTravelFrequency", v)}
+                  placeholder="e.g. Twice a year, Monthly..."
+                  required
+                />
+              </FormField>
+
+              <FormField label="26. Are you a member of any professional organizations?" required>
+                <RadioGroup
+                  name="professionalOrganizations"
+                  options={PROFESSIONAL_ORG_OPTIONS}
+                  value={data.professionalOrganizations}
+                  onChange={(v) => update("professionalOrganizations", v)}
+                />
+              </FormField>
+
+              <FormField
+                label="27. Which of the following news sources do you trust?"
+                hint="Check all that apply"
+              >
+                <CheckboxGroup
+                  options={NEWS_SOURCES}
+                  values={data.trustedNewsSources}
+                  onChange={(v) => update("trustedNewsSources", v)}
+                />
+                {data.trustedNewsSources.includes("Other") && (
+                  <div className="mt-3">
+                    <TextInput
+                      value={data.trustedNewsOther}
+                      onChange={(v) => update("trustedNewsOther", v)}
+                      placeholder="Other news source(s)"
+                    />
+                  </div>
+                )}
               </FormField>
             </>
           )}
 
           {step === 4 && (
             <>
-              <FormField label="What services are you interested in?" hint="Select all that apply">
-                <CheckboxGroup
-                  options={SERVICES}
-                  values={data.servicesInterested}
-                  onChange={(v) => update("servicesInterested", v)}
-                />
-              </FormField>
-              <FormField label="What is your preferred method of communication?" required>
+              <FormField label="28. What is your favorite type of cuisine?" required>
                 <RadioGroup
-                  name="communication"
-                  options={COMMUNICATION_METHODS}
-                  value={data.preferredCommunication}
-                  onChange={(v) => update("preferredCommunication", v)}
+                  name="favoriteCuisine"
+                  options={CUISINE_OPTIONS}
+                  value={data.favoriteCuisine}
+                  onChange={(v) => update("favoriteCuisine", v)}
                 />
+                {data.favoriteCuisine === "Other" && (
+                  <div className="mt-3">
+                    <TextInput
+                      value={data.cuisineOther}
+                      onChange={(v) => update("cuisineOther", v)}
+                      placeholder="Please specify"
+                    />
+                  </div>
+                )}
               </FormField>
-              <FormField label="What is your preferred time for a discovery call?" required>
-                <TextInput
-                  value={data.preferredCallTime}
-                  onChange={(v) => update("preferredCallTime", v)}
-                  placeholder="e.g. Weekdays 10am–2pm EST"
-                  required
-                />
-              </FormField>
-              <FormField label="Do you have a specific deadline for your project?">
-                <TextInput
-                  value={data.projectDeadline}
-                  onChange={(v) => update("projectDeadline", v)}
-                  placeholder="e.g. End of Q3 2026"
-                />
-              </FormField>
-              <FormField label="Is there anything else you would like us to know?">
-                <TextArea
-                  value={data.additionalInfo}
-                  onChange={(v) => update("additionalInfo", v)}
-                  placeholder="Any additional context..."
-                  rows={4}
-                />
-              </FormField>
-            </>
-          )}
 
-          {step === 5 && (
-            <>
-              <FormField label="Which best describes your current business stage?" required>
+              <FormField label="29. How often do you eat out at restaurants?" required>
                 <RadioGroup
-                  name="businessStage"
-                  options={BUSINESS_STAGES}
-                  value={data.businessStage}
-                  onChange={(v) => update("businessStage", v)}
+                  name="eatOutFrequency"
+                  options={FREQUENCY_OPTIONS}
+                  value={data.eatOutFrequency}
+                  onChange={(v) => update("eatOutFrequency", v)}
                 />
               </FormField>
-              <FormField label="What is your primary target audience?" required>
+
+              <FormField label="30. Do you prefer to cook at home or order takeout?" required>
+                <RadioGroup
+                  name="cookOrTakeout"
+                  options={COOK_OR_TAKEOUT}
+                  value={data.cookOrTakeout}
+                  onChange={(v) => update("cookOrTakeout", v)}
+                />
+              </FormField>
+
+              <FormField label="31. How many hours a day do you spend on the internet?" required>
                 <TextInput
-                  value={data.targetAudience}
-                  onChange={(v) => update("targetAudience", v)}
-                  placeholder="Describe your ideal customer"
+                  type="number"
+                  value={data.internetHoursPerDay}
+                  onChange={(v) => update("internetHoursPerDay", v)}
+                  placeholder="Hours per day"
                   required
                 />
               </FormField>
-              <FormField label="Who are your main competitors?">
+
+              <FormField label="32. What is your primary device for accessing the internet?" required>
                 <TextInput
-                  value={data.competitors}
-                  onChange={(v) => update("competitors", v)}
-                  placeholder="List key competitors"
+                  value={data.primaryInternetDevice}
+                  onChange={(v) => update("primaryInternetDevice", v)}
+                  placeholder="e.g. Smartphone, Laptop, Tablet..."
+                  required
                 />
               </FormField>
-              <FormField label="What is your unique selling proposition (USP)?" required>
+
+              <FormField label="33. Do you use any smart home devices?" required>
+                <RadioGroup
+                  name="smartHomeDevices"
+                  options={YES_NO}
+                  value={data.smartHomeDevices}
+                  onChange={(v) => update("smartHomeDevices", v)}
+                />
+              </FormField>
+
+              <FormField label="34. How often do you shop online?" required>
+                <RadioGroup
+                  name="shopOnlineFrequency"
+                  options={FREQUENCY_OPTIONS}
+                  value={data.shopOnlineFrequency}
+                  onChange={(v) => update("shopOnlineFrequency", v)}
+                />
+              </FormField>
+
+              <FormField label="35. What is your primary reason for shopping online?" required>
                 <TextArea
-                  value={data.usp}
-                  onChange={(v) => update("usp", v)}
-                  placeholder="What sets you apart?"
+                  value={data.primaryOnlineShoppingReason}
+                  onChange={(v) => update("primaryOnlineShoppingReason", v)}
+                  placeholder="e.g. Convenience, better prices, wider selection..."
                   rows={4}
                   required
-                />
-              </FormField>
-              <FormField label="How do you currently track your marketing performance?">
-                <TextArea
-                  value={data.trackPerformance}
-                  onChange={(v) => update("trackPerformance", v)}
-                  placeholder="Tools, metrics, processes..."
-                  rows={3}
-                />
-              </FormField>
-              <FormField label="Do you have a dedicated marketing team?" required>
-                <RadioGroup
-                  name="marketingTeam"
-                  options={YES_NO}
-                  value={data.dedicatedMarketingTeam}
-                  onChange={(v) => update("dedicatedMarketingTeam", v)}
-                />
-              </FormField>
-              <FormField label="What is your biggest marketing pain point?" required>
-                <TextArea
-                  value={data.marketingPainPoint}
-                  onChange={(v) => update("marketingPainPoint", v)}
-                  placeholder="Your top frustration..."
-                  rows={3}
-                  required
-                />
-              </FormField>
-              <FormField label="What is your desired outcome from working with us?" required>
-                <TextArea
-                  value={data.desiredOutcome}
-                  onChange={(v) => update("desiredOutcome", v)}
-                  placeholder="What success looks like..."
-                  rows={3}
-                  required
-                />
-              </FormField>
-              <FormField label="Are you currently working with any other marketing agencies?" required>
-                <RadioGroup
-                  name="agencies"
-                  options={YES_NO}
-                  value={data.workingWithAgencies}
-                  onChange={(v) => update("workingWithAgencies", v)}
-                />
-              </FormField>
-              <FormField label="What is your budget for this specific project?" required>
-                <TextInput
-                  value={data.projectBudget}
-                  onChange={(v) => update("projectBudget", v)}
-                  placeholder="e.g. $10,000"
-                  required
-                />
-              </FormField>
-              <FormField label="How soon would you like to get started?" required>
-                <TextInput
-                  value={data.startTimeline}
-                  onChange={(v) => update("startTimeline", v)}
-                  placeholder="e.g. Within 2 weeks"
-                  required
-                />
-              </FormField>
-              <FormField label="Are you the decision-maker for this project?" required>
-                <RadioGroup
-                  name="decisionMaker"
-                  options={YES_NO}
-                  value={data.isDecisionMaker}
-                  onChange={(v) => update("isDecisionMaker", v)}
-                />
-              </FormField>
-              {data.isDecisionMaker === "No" && (
-                <FormField label="If no, who is the decision-maker?">
-                  <TextInput
-                    value={data.decisionMakerName}
-                    onChange={(v) => update("decisionMakerName", v)}
-                    placeholder="Name and role"
-                  />
-                </FormField>
-              )}
-              <FormField label="Any other comments or questions?">
-                <TextArea
-                  value={data.otherComments}
-                  onChange={(v) => update("otherComments", v)}
-                  placeholder="Anything else you'd like to share..."
-                  rows={4}
                 />
               </FormField>
             </>
@@ -483,14 +559,14 @@ export default function DiscoveryForm() {
                 ? "Submitting..."
                 : step < FORM_STEPS.length
                   ? "Continue"
-                  : "Submit Assessment"}
+                  : "Submit"}
             </button>
           </div>
         </form>
       </main>
 
       <footer className="border-t border-black/5 py-6 text-center text-xs text-black/40">
-        Macro Discovery Self-Form Assessment
+        Section 1 — Socio-demographic and Background
       </footer>
     </div>
   );

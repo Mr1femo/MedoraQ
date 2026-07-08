@@ -1,140 +1,157 @@
 export interface FormData {
-  email: string;
-  fullName: string;
-  company: string;
-  jobTitle: string;
-  workEmail: string;
-  phone: string;
-  linkedin: string;
-  website: string;
-  employees: string;
-  annualRevenue: string;
-  industry: string;
-  businessGoals: string;
-  challenges: string;
-  marketingStrategy: string;
-  marketingChannels: string[];
-  marketingSatisfaction: string;
-  monthlyBudget: string;
-  hearAboutUs: string;
-  servicesInterested: string[];
+  age: string;
+  gender: string;
+  occupation: string;
+  education: string;
+  maritalStatus: string;
+  householdIncome: string;
+  householdSize: string;
+  primaryLanguage: string;
+  chronicHealthConditions: string;
+  currentHealthStatus: string;
+  exerciseFrequency: string;
+  sleepHours: string;
+  doYouSmoke: string;
+  alcoholConsumption: string;
   preferredCommunication: string;
-  preferredCallTime: string;
-  projectDeadline: string;
-  additionalInfo: string;
-  businessStage: string;
-  targetAudience: string;
-  competitors: string;
-  usp: string;
-  trackPerformance: string;
-  dedicatedMarketingTeam: string;
-  marketingPainPoint: string;
-  desiredOutcome: string;
-  workingWithAgencies: string;
-  projectBudget: string;
-  startTimeline: string;
-  isDecisionMaker: string;
-  decisionMakerName: string;
-  otherComments: string;
+  preferredCommunicationOther: string;
+  healthInsuranceSatisfaction: string;
+  healthInformationSource: string;
+  doctorCheckupFrequency: string;
+  socialMediaPlatforms: string[];
+  socialMediaOther: string;
+  favoriteHobby: string;
+  hobbyHoursPerWeek: string;
+  productChoiceFactor: string;
+  ownPets: string;
+  preferredTransportation: string;
+  transportationOther: string;
+  leisureTravelFrequency: string;
+  professionalOrganizations: string;
+  trustedNewsSources: string[];
+  trustedNewsOther: string;
+  favoriteCuisine: string;
+  cuisineOther: string;
+  eatOutFrequency: string;
+  cookOrTakeout: string;
+  internetHoursPerDay: string;
+  primaryInternetDevice: string;
+  smartHomeDevices: string;
+  shopOnlineFrequency: string;
+  primaryOnlineShoppingReason: string;
 }
 
 export const initialFormData: FormData = {
-  email: "",
-  fullName: "",
-  company: "",
-  jobTitle: "",
-  workEmail: "",
-  phone: "",
-  linkedin: "",
-  website: "",
-  employees: "",
-  annualRevenue: "",
-  industry: "",
-  businessGoals: "",
-  challenges: "",
-  marketingStrategy: "",
-  marketingChannels: [],
-  marketingSatisfaction: "",
-  monthlyBudget: "",
-  hearAboutUs: "",
-  servicesInterested: [],
+  age: "",
+  gender: "",
+  occupation: "",
+  education: "",
+  maritalStatus: "",
+  householdIncome: "",
+  householdSize: "",
+  primaryLanguage: "",
+  chronicHealthConditions: "",
+  currentHealthStatus: "",
+  exerciseFrequency: "",
+  sleepHours: "",
+  doYouSmoke: "",
+  alcoholConsumption: "",
   preferredCommunication: "",
-  preferredCallTime: "",
-  projectDeadline: "",
-  additionalInfo: "",
-  businessStage: "",
-  targetAudience: "",
-  competitors: "",
-  usp: "",
-  trackPerformance: "",
-  dedicatedMarketingTeam: "",
-  marketingPainPoint: "",
-  desiredOutcome: "",
-  workingWithAgencies: "",
-  projectBudget: "",
-  startTimeline: "",
-  isDecisionMaker: "",
-  decisionMakerName: "",
-  otherComments: "",
+  preferredCommunicationOther: "",
+  healthInsuranceSatisfaction: "",
+  healthInformationSource: "",
+  doctorCheckupFrequency: "",
+  socialMediaPlatforms: [],
+  socialMediaOther: "",
+  favoriteHobby: "",
+  hobbyHoursPerWeek: "",
+  productChoiceFactor: "",
+  ownPets: "",
+  preferredTransportation: "",
+  transportationOther: "",
+  leisureTravelFrequency: "",
+  professionalOrganizations: "",
+  trustedNewsSources: [],
+  trustedNewsOther: "",
+  favoriteCuisine: "",
+  cuisineOther: "",
+  eatOutFrequency: "",
+  cookOrTakeout: "",
+  internetHoursPerDay: "",
+  primaryInternetDevice: "",
+  smartHomeDevices: "",
+  shopOnlineFrequency: "",
+  primaryOnlineShoppingReason: "",
 };
 
-export const MARKETING_CHANNELS = [
+export const GENDER_OPTIONS = ["Male", "Female", "Other", "Prefer not to say"] as const;
+export const MARITAL_STATUS = ["Single", "Married", "Divorced", "Widowed"] as const;
+export const HOUSEHOLD_INCOME = ["<$1000", "$1000-$2000", "$2000-$3000", ">$3000"] as const;
+export const YES_NO = ["Yes", "No"] as const;
+export const HEALTH_STATUS = ["Excellent", "Good", "Fair", "Poor"] as const;
+export const FREQUENCY_OPTIONS = ["Daily", "Weekly", "Monthly", "Rarely", "Never"] as const;
+export const COMMUNICATION_OPTIONS = ["Email", "Phone", "Text", "Other"] as const;
+export const HEALTH_INFO_SOURCES = [
+  "Doctor / Healthcare provider",
+  "Internet / Websites",
+  "Friends / Family",
+  "Social Media",
+  "Books / Magazines",
+  "Other",
+] as const;
+export const DOCTOR_VISIT_FREQUENCY = [
+  "Monthly",
+  "Every 3–6 months",
+  "Yearly",
+  "Rarely",
+  "Never",
+] as const;
+export const SOCIAL_MEDIA_PLATFORMS = [
   "Facebook",
   "Instagram",
-  "LinkedIn",
   "Twitter",
-  "Google Ads",
-  "SEO",
-  "Content Marketing",
-  "Email Marketing",
+  "LinkedIn",
+  "TikTok",
+  "Snapchat",
+  "Reddit",
+  "Pinterest",
   "Other",
 ] as const;
-
-export const SERVICES = [
-  "Social Media Management",
-  "Content Creation",
-  "Paid Advertising",
-  "SEO",
-  "Website Design",
-  "Branding",
+export const TRANSPORTATION_OPTIONS = ["Car", "Public Transit", "Bike", "Walk", "Other"] as const;
+export const PROFESSIONAL_ORG_OPTIONS = ["Yes", "No", "Maybe"] as const;
+export const NEWS_SOURCES = [
+  "TV News",
+  "Newspaper",
+  "Online News",
+  "Social Media",
+  "Podcasts",
+  "Radio",
   "Other",
 ] as const;
-
-export const BUSINESS_STAGES = [
-  "Idea stage",
-  "MVP / Early stage",
-  "Growth stage",
-  "Established",
-] as const;
-
-export const COMMUNICATION_METHODS = ["Email", "Phone", "WhatsApp"] as const;
-
-export const YES_NO = ["Yes", "No"] as const;
+export const CUISINE_OPTIONS = ["Italian", "Chinese", "Mexican", "Indian", "Japanese", "Other"] as const;
+export const COOK_OR_TAKEOUT = ["Cook at home", "Order takeout"] as const;
 
 export const FORM_STEPS = [
   {
     id: 1,
-    title: "Contact & Company",
-    description: "Tell us about yourself and your organization.",
+    title: "Personal & Demographics",
+    description: "Basic information about you and your household.",
   },
   {
     id: 2,
-    title: "Business Strategy",
-    description: "Share your goals and current challenges.",
+    title: "Health & Lifestyle",
+    description: "Your health habits and healthcare preferences.",
   },
   {
     id: 3,
-    title: "Marketing",
-    description: "Help us understand your marketing landscape.",
+    title: "Social & Interests",
+    description: "Hobbies, media, and daily preferences.",
   },
   {
     id: 4,
-    title: "Services & Logistics",
-    description: "What you're looking for and how to reach you.",
-  },
-  {
-    id: 5,
-    title: "Deep Dive",
-    description: "Final details to prepare for your discovery call.",
+    title: "Food & Digital Habits",
+    description: "Eating habits and technology usage.",
   },
 ] as const;
+
+export const TOTAL_QUESTIONS = 35;
