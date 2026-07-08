@@ -8,6 +8,7 @@ import {
   TextArea,
   RadioGroup,
   CheckboxGroup,
+  MultiSelectPills,
   ScaleInput,
   SelectInput,
 } from "@/components/form-fields";
@@ -313,7 +314,7 @@ export default function DiscoveryForm() {
                 required
                 hint="Select all that apply"
               >
-                <CheckboxGroup
+                <MultiSelectPills
                   options={ON_CAMERA_ROLES}
                   values={data.onCameraTeamMembers}
                   onChange={(v) => update("onCameraTeamMembers", v)}
