@@ -308,12 +308,15 @@ export default function DiscoveryForm() {
 
           {step === 4 && (
             <>
-              <FormField label="18. Which team members are available to appear on camera?" required>
-                <RadioGroup
-                  name="onCameraTeamMember"
+              <FormField
+                label="18. Which team members are available to appear on camera?"
+                required
+                hint="Select all that apply"
+              >
+                <CheckboxGroup
                   options={ON_CAMERA_ROLES}
-                  value={data.onCameraTeamMember}
-                  onChange={(v) => update("onCameraTeamMember", v)}
+                  values={data.onCameraTeamMembers}
+                  onChange={(v) => update("onCameraTeamMembers", v)}
                 />
               </FormField>
 

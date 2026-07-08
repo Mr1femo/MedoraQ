@@ -16,7 +16,7 @@ export interface FormData {
   medicalPracticeUSP: string;
   uniqueProduct: string;
   brandProductStand: string;
-  onCameraTeamMember: string;
+  onCameraTeamMembers: string[];
   filmingParticipantsNames: string;
   comfortableOnCamera: string;
   filmingAvailableDays: string[];
@@ -53,7 +53,7 @@ export const initialFormData: FormData = {
   medicalPracticeUSP: "",
   uniqueProduct: "",
   brandProductStand: "",
-  onCameraTeamMember: "",
+  onCameraTeamMembers: [],
   filmingParticipantsNames: "",
   comfortableOnCamera: "",
   filmingAvailableDays: [],

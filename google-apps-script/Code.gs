@@ -94,7 +94,7 @@ function doPost(e) {
       data.medicalPracticeUSP || "",
       data.uniqueProduct || "",
       data.brandProductStand || "",
-      data.onCameraTeamMember || "",
+      (data.onCameraTeamMembers || []).join(", "),
       data.filmingParticipantsNames || "",
       data.comfortableOnCamera || "",
       (data.filmingAvailableDays || []).join(", "),
