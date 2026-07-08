@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Socio-demographic & Background Form",
-  description: "Section 1 — complete all 35 questions",
+  title: "Medora — Discovery Call Form",
+  description: "Complete all 33 Medora discovery call questions",
 };
 
 export default function RootLayout({

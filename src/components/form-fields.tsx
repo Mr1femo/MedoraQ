@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useRef } from "react";
 
 interface FormFieldProps {
   label: string;
@@ -115,12 +116,16 @@ interface CheckboxGroupProps {
 }
 
 export function CheckboxGroup({ options, values, onChange }: CheckboxGroupProps) {
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
+
   const toggle = (option: string) => {
-    if (values.includes(option)) {
-      onChange(values.filter((v) => v !== option));
-    } else {
-      onChange([...values, option]);
-    }
+    const current = valuesRef.current;
+    onChange(
+      current.includes(option)
+        ? current.filter((v) => v !== option)
+        : [...current, option]
+    );
   };
 
   return (
@@ -143,6 +148,49 @@ export function CheckboxGroup({ options, values, onChange }: CheckboxGroupProps)
           {option}
         </label>
       ))}
+    </div>
+  );
+}
+
+interface MultiSelectPillsProps {
+  options: readonly string[];
+  values: string[];
+  onChange: (values: string[]) => void;
+}
+
+export function MultiSelectPills({ options, values, onChange }: MultiSelectPillsProps) {
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
+
+  const toggle = (option: string) => {
+    const current = valuesRef.current;
+    onChange(
+      current.includes(option)
+        ? current.filter((v) => v !== option)
+        : [...current, option]
+    );
+  };
+
+  return (
+    <div className="flex flex-wrap gap-3">
+      {options.map((option) => {
+        const selected = values.includes(option);
+        return (
+          <button
+            key={option}
+            type="button"
+            aria-pressed={selected}
+            onClick={() => toggle(option)}
+            className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-all ${
+              selected
+                ? "border-brand bg-brand/10 text-black ring-1 ring-brand/30"
+                : "border-black/10 bg-white text-black/70 hover:border-brand/40"
+            }`}
+          >
+            {option}
+          </button>
+        );
+      })}
     </div>
   );
 }
