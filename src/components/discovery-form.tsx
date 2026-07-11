@@ -11,6 +11,7 @@ import {
   MultiSelectPills,
   ScaleInput,
   SelectInput,
+  FileUpload,
 } from "@/components/form-fields";
 import {
   type FormData,
@@ -24,6 +25,7 @@ import {
   NEW_PATIENTS_OPTIONS,
   COMMUNICATION_STYLES,
   CONTENT_APPROVERS,
+  AI_IMAGE_PREFERENCES,
   ON_CAMERA_ROLES,
   COMFORT_ON_CAMERA,
   FILMING_DAYS,
@@ -263,15 +265,89 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="13. Do you already have existing branding elements?">
-                <TextInput
-                  value={data.existingBranding}
-                  onChange={(v) => update("existingBranding", v)}
-                  placeholder="Logo, colors, fonts, brand guidelines..."
+              <FormField
+                label="13. Do you have branding guidelines? (specific colours, fonts, style for the brand)"
+                required
+              >
+                <RadioGroup
+                  name="hasBrandingGuidelines"
+                  options={YES_NO}
+                  value={data.hasBrandingGuidelines}
+                  onChange={(v) => update("hasBrandingGuidelines", v)}
                 />
               </FormField>
 
-              <FormField label="14. Who will approve the content from your side?">
+              {data.hasBrandingGuidelines === "Yes" && (
+                <FormField
+                  label="Upload your branding guidelines"
+                  required
+                  hint="PDF, images, or design files"
+                >
+                  <FileUpload
+                    files={data.brandingGuidelinesFiles}
+                    onChange={(v) => update("brandingGuidelinesFiles", v)}
+                    accept=".png,.jpg,.jpeg,.pdf,.ai,.psd,.svg,.webp,.doc,.docx"
+                  />
+                </FormField>
+              )}
+
+              <FormField label="14. Do you want to change the logo?" required>
+                <RadioGroup
+                  name="wantToChangeLogo"
+                  options={YES_NO}
+                  value={data.wantToChangeLogo}
+                  onChange={(v) => update("wantToChangeLogo", v)}
+                />
+              </FormField>
+
+              <FormField
+                label="15. Upload your logo"
+                required
+                hint="PNG / JPG image, Illustrator (.ai), or Photoshop (.psd)"
+              >
+                <FileUpload
+                  files={data.logoFiles}
+                  onChange={(v) => update("logoFiles", v)}
+                  accept=".png,.jpg,.jpeg,.ai,.psd,.svg,.pdf,.webp"
+                />
+              </FormField>
+
+              <FormField
+                label="16. Do you have logo variations? (same logo with different colours and composition)"
+                required
+              >
+                <RadioGroup
+                  name="hasLogoVariations"
+                  options={YES_NO}
+                  value={data.hasLogoVariations}
+                  onChange={(v) => update("hasLogoVariations", v)}
+                />
+              </FormField>
+
+              {data.hasLogoVariations === "Yes" && (
+                <FormField label="Upload your logo variations" required>
+                  <FileUpload
+                    files={data.logoVariationFiles}
+                    onChange={(v) => update("logoVariationFiles", v)}
+                    accept=".png,.jpg,.jpeg,.ai,.psd,.svg,.pdf,.webp"
+                  />
+                </FormField>
+              )}
+
+              <FormField
+                label="17. How would you describe your brand personality? (Minimal, luxurious, scientific, natural, playful, premium, etc.)"
+                required
+              >
+                <TextArea
+                  value={data.brandPersonality}
+                  onChange={(v) => update("brandPersonality", v)}
+                  placeholder="Describe your brand personality..."
+                  rows={4}
+                  required
+                />
+              </FormField>
+
+              <FormField label="18. Who will approve the content from your side?">
                 <RadioGroup
                   name="contentApprover"
                   options={CONTENT_APPROVERS}
@@ -280,7 +356,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="15. What makes your medical practice unique (USP)?">
+              <FormField label="19. What makes your medical practice unique (USP)?">
                 <TextArea
                   value={data.medicalPracticeUSP}
                   onChange={(v) => update("medicalPracticeUSP", v)}
@@ -289,7 +365,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="16. Do you have a unique product that no other competitors have? If yes, what is it?">
+              <FormField label="20. Do you have a unique product that no other competitors have? If yes, what is it?">
                 <TextArea
                   value={data.uniqueProduct}
                   onChange={(v) => update("uniqueProduct", v)}
@@ -298,7 +374,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="17. Where do you think your brand and product stand?" required>
+              <FormField label="21. Where do you think your brand and product stand?" required>
                 <ScaleInput
                   min={1}
                   max={10}
@@ -313,8 +389,82 @@ export default function DiscoveryForm() {
 
           {step === 4 && (
             <>
+              <FormField label="22. Are there brands whose visual style you like?">
+                <TextInput
+                  value={data.likedBrandVisualStyles}
+                  onChange={(v) => update("likedBrandVisualStyles", v)}
+                  placeholder="List brands or describe the style you like"
+                />
+              </FormField>
+
+              <FormField label="23. How do you feel about AI?" required>
+                <RadioGroup
+                  name="aiImagePreference"
+                  options={AI_IMAGE_PREFERENCES}
+                  value={data.aiImagePreference}
+                  onChange={(v) => update("aiImagePreference", v)}
+                />
+              </FormField>
+
+              <FormField label="24. What style of posts do you not like?">
+                <TextInput
+                  value={data.dislikedPostStyles}
+                  onChange={(v) => update("dislikedPostStyles", v)}
+                  placeholder="Describe styles or approaches to avoid"
+                />
+              </FormField>
+
+              <FormField label="25. Do you have professional product photography?" required>
+                <RadioGroup
+                  name="hasProductPhotography"
+                  options={YES_NO}
+                  value={data.hasProductPhotography}
+                  onChange={(v) => update("hasProductPhotography", v)}
+                />
+              </FormField>
+
+              {data.hasProductPhotography === "Yes" && (
+                <FormField label="Upload your product photography" required>
+                  <FileUpload
+                    files={data.productPhotographyFiles}
+                    onChange={(v) => update("productPhotographyFiles", v)}
+                    accept=".png,.jpg,.jpeg,.webp,.pdf,.zip"
+                    hint="Images or ZIP · max 8 MB each"
+                  />
+                </FormField>
+              )}
+
+              <FormField label="26. What is the preferred video style—for example, more educational and wholesome, or more trendy?">
+                <TextInput
+                  value={data.preferredVideoStyle}
+                  onChange={(v) => update("preferredVideoStyle", v)}
+                  placeholder="e.g. Educational, wholesome, trendy..."
+                />
+              </FormField>
+
+              <FormField label="27. Are there any specific elements or approaches you prefer to avoid in video production?">
+                <TextInput
+                  value={data.videoElementsToAvoid}
+                  onChange={(v) => update("videoElementsToAvoid", v)}
+                  placeholder="Elements or approaches to avoid"
+                />
+              </FormField>
+
+              <FormField label="28. Do you prefer having the company logo displayed in a fixed position (such as a corner) throughout the video?">
+                <RadioGroup
+                  name="logoFixedPositionInVideo"
+                  options={YES_NO}
+                  value={data.logoFixedPositionInVideo}
+                  onChange={(v) => update("logoFixedPositionInVideo", v)}
+                />
+              </FormField>
+            </>
+          )}
+
+          {step === 5 && (
+            <>
               <FormField
-                label="18. Which team members are available to appear on camera?"
+                label="29. Which team members are available to appear on camera?"
                 required
                 hint="Select all that apply"
               >
@@ -325,7 +475,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="19. Please provide the names and job titles of the people available for filming." required>
+              <FormField label="30. Please provide the names and job titles of the people available for filming." required>
                 <TextArea
                   value={data.filmingParticipantsNames}
                   onChange={(v) => update("filmingParticipantsNames", v)}
@@ -335,7 +485,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="20. Are all participants comfortable speaking on camera?" required>
+              <FormField label="31. Are all participants comfortable speaking on camera?" required>
                 <RadioGroup
                   name="comfortableOnCamera"
                   options={COMFORT_ON_CAMERA}
@@ -344,7 +494,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="21. Which days are available for filming?" required hint="Select all that apply">
+              <FormField label="32. Which days are available for filming?" required hint="Select all that apply">
                 <MultiSelectPills
                   options={FILMING_DAYS}
                   values={data.filmingAvailableDays}
@@ -354,9 +504,9 @@ export default function DiscoveryForm() {
             </>
           )}
 
-          {step === 5 && (
+          {step === 6 && (
             <>
-              <FormField label="22. Which locations are available for filming?" required hint="Select all that apply">
+              <FormField label="33. Which locations are available for filming?" required hint="Select all that apply">
                 <CheckboxGroup
                   options={FILMING_LOCATIONS}
                   values={data.filmingLocations}
@@ -373,7 +523,7 @@ export default function DiscoveryForm() {
                 )}
               </FormField>
 
-              <FormField label="23. Please provide the address of each filming location." required>
+              <FormField label="34. Please provide the address of each filming location." required>
                 <TextArea
                   value={data.filmingLocationAddresses}
                   onChange={(v) => update("filmingLocationAddresses", v)}
@@ -383,7 +533,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="24. Are there any areas where filming is NOT permitted?">
+              <FormField label="35. Are there any areas where filming is NOT permitted?">
                 <TextArea
                   value={data.filmingNotPermittedAreas}
                   onChange={(v) => update("filmingNotPermittedAreas", v)}
@@ -392,7 +542,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="25. Are there any safety or access requirements for filming?">
+              <FormField label="36. Are there any safety or access requirements for filming?">
                 <TextArea
                   value={data.filmingSafetyRequirements}
                   onChange={(v) => update("filmingSafetyRequirements", v)}
@@ -401,7 +551,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="26. Are there any dates or times when filming is not allowed?" required>
+              <FormField label="37. Are there any dates or times when filming is not allowed?" required>
                 <TextInput
                   value={data.filmingRestrictedDates}
                   onChange={(v) => update("filmingRestrictedDates", v)}
@@ -412,9 +562,9 @@ export default function DiscoveryForm() {
             </>
           )}
 
-          {step === 6 && (
+          {step === 7 && (
             <>
-              <FormField label="27. Preferred filming hours" required>
+              <FormField label="38. Preferred filming hours" required>
                 <RadioGroup
                   name="preferredFilmingHours"
                   options={FILMING_HOURS}
@@ -423,7 +573,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="28. Can our production team visit the locations before the filming day?">
+              <FormField label="39. Can our production team visit the locations before the filming day?">
                 <RadioGroup
                   name="locationVisitBeforeFilming"
                   options={YES_NO}
@@ -434,7 +584,7 @@ export default function DiscoveryForm() {
 
               {data.locationVisitBeforeFilming === "Yes" && (
                 <>
-                  <FormField label="29. If yes, what is the preferred date and time for the location visit?" required>
+                  <FormField label="40. If yes, what is the preferred date and time for the location visit?" required>
                     <TextInput
                       value={data.locationVisitDateTime}
                       onChange={(v) => update("locationVisitDateTime", v)}
@@ -443,7 +593,7 @@ export default function DiscoveryForm() {
                     />
                   </FormField>
 
-                  <FormField label="30. Who will accompany our team during the location visit?" required>
+                  <FormField label="41. Who will accompany our team during the location visit?" required>
                     <TextInput
                       value={data.locationVisitAccompaniment}
                       onChange={(v) => update("locationVisitAccompaniment", v)}
@@ -454,7 +604,7 @@ export default function DiscoveryForm() {
                 </>
               )}
 
-              <FormField label="31. Will the locations be prepared before filming?">
+              <FormField label="42. Will the locations be prepared before filming?">
                 <RadioGroup
                   name="locationsPreparedBeforeFilming"
                   options={YES_NO}
@@ -463,7 +613,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="32. Will all required products be available on the filming day?" required>
+              <FormField label="43. Will all required products be available on the filming day?" required>
                 <RadioGroup
                   name="productsAvailableOnFilmingDay"
                   options={YES_NO}
@@ -472,7 +622,7 @@ export default function DiscoveryForm() {
                 />
               </FormField>
 
-              <FormField label="33. Is there anything else our production team should know before filming?" required>
+              <FormField label="44. Is there anything else our production team should know before filming?" required>
                 <TextArea
                   value={data.additionalFilmingNotes}
                   onChange={(v) => update("additionalFilmingNotes", v)}

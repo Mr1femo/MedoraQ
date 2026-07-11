@@ -1,4 +1,9 @@
-import type { FormData } from "./form-data";
+import type { FormData, UploadedFile } from "./form-data";
+
+function summarizeFiles(files: UploadedFile[]): string {
+  if (!files.length) return "";
+  return files.map((f) => f.name).join(", ");
+}
 
 export async function submitForm(data: FormData): Promise<void> {
   const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
@@ -15,6 +20,10 @@ export async function submitForm(data: FormData): Promise<void> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       ...data,
+      brandingGuidelinesFileNames: summarizeFiles(data.brandingGuidelinesFiles),
+      logoFileNames: summarizeFiles(data.logoFiles),
+      logoVariationFileNames: summarizeFiles(data.logoVariationFiles),
+      productPhotographyFileNames: summarizeFiles(data.productPhotographyFiles),
       submittedAt: new Date().toISOString(),
     }),
   });

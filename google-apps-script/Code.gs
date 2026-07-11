@@ -7,9 +7,13 @@
  * 3. Run setupSheet once
  * 4. Deploy → Web app (Execute as: Me, Access: Anyone)
  * 5. Set NEXT_PUBLIC_GOOGLE_SCRIPT_URL in Vercel
+ *
+ * Uploaded files are saved to a Drive folder named "Medora Form Uploads"
+ * and file links are written into the sheet.
  */
 
 const SHEET_NAME = "Submissions";
+const UPLOAD_FOLDER_NAME = "Medora Form Uploads";
 
 function setupSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -33,28 +37,42 @@ function setupSheet() {
     "10. New Patients Per Month",
     "11. Communication Style",
     "12. Active Online",
-    "13. Existing Branding",
-    "14. Content Approver",
-    "15. Medical Practice USP",
-    "16. Unique Product",
-    "17. Brand & Product Stand (1-10)",
-    "18. On-Camera Team Members",
-    "19. Filming Participants Names",
-    "20. Comfortable On Camera",
-    "21. Filming Available Days",
-    "22. Filming Locations",
-    "22b. Filming Location Other",
-    "23. Filming Location Addresses",
-    "24. Filming Not Permitted Areas",
-    "25. Filming Safety Requirements",
-    "26. Filming Restricted Dates",
-    "27. Preferred Filming Hours",
-    "28. Location Visit Before Filming",
-    "29. Location Visit Date/Time",
-    "30. Location Visit Accompaniment",
-    "31. Locations Prepared Before Filming",
-    "32. Products Available On Filming Day",
-    "33. Additional Filming Notes",
+    "13. Has Branding Guidelines",
+    "13b. Branding Guidelines Files",
+    "14. Want To Change Logo",
+    "15. Logo Files",
+    "16. Has Logo Variations",
+    "16b. Logo Variation Files",
+    "17. Brand Personality",
+    "18. Content Approver",
+    "19. Medical Practice USP",
+    "20. Unique Product",
+    "21. Brand & Product Stand (1-10)",
+    "22. Liked Brand Visual Styles",
+    "23. AI Image Preference",
+    "24. Disliked Post Styles",
+    "25. Has Product Photography",
+    "25b. Product Photography Files",
+    "26. Preferred Video Style",
+    "27. Video Elements To Avoid",
+    "28. Logo Fixed Position In Video",
+    "29. On-Camera Team Members",
+    "30. Filming Participants Names",
+    "31. Comfortable On Camera",
+    "32. Filming Available Days",
+    "33. Filming Locations",
+    "33b. Filming Location Other",
+    "34. Filming Location Addresses",
+    "35. Filming Not Permitted Areas",
+    "36. Filming Safety Requirements",
+    "37. Filming Restricted Dates",
+    "38. Preferred Filming Hours",
+    "39. Location Visit Before Filming",
+    "40. Location Visit Date/Time",
+    "41. Location Visit Accompaniment",
+    "42. Locations Prepared Before Filming",
+    "43. Products Available On Filming Day",
+    "44. Additional Filming Notes",
   ];
 
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -63,6 +81,40 @@ function setupSheet() {
     .setBackground("#15cbc4")
     .setFontColor("#ffffff");
   sheet.setFrozenRows(1);
+}
+
+function getOrCreateUploadFolder() {
+  const folders = DriveApp.getFoldersByName(UPLOAD_FOLDER_NAME);
+  if (folders.hasNext()) {
+    return folders.next();
+  }
+  return DriveApp.createFolder(UPLOAD_FOLDER_NAME);
+}
+
+function saveUploadedFiles(files, submissionLabel) {
+  if (!files || !files.length) return "";
+
+  const root = getOrCreateUploadFolder();
+  const submissionFolder = root.createFolder(submissionLabel);
+  const urls = [];
+
+  files.forEach(function (file) {
+    if (!file || !file.dataUrl) return;
+
+    const parts = String(file.dataUrl).split(",");
+    const meta = parts[0] || "";
+    const base64 = parts[1] || "";
+    if (!base64) return;
+
+    const mimeMatch = meta.match(/data:([^;]+);/);
+    const mimeType = (file.type || (mimeMatch && mimeMatch[1]) || "application/octet-stream");
+    const blob = Utilities.newBlob(Utilities.base64Decode(base64), mimeType, file.name || "upload");
+    const saved = submissionFolder.createFile(blob);
+    saved.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    urls.push(saved.getUrl());
+  });
+
+  return urls.join("\n");
 }
 
 function doPost(e) {
@@ -75,8 +127,16 @@ function doPost(e) {
       sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
     }
 
+    const stamp = data.submittedAt || new Date().toISOString();
+    const label = (data.clinicDoctorName || "Submission") + " — " + stamp;
+
+    const brandingLinks = saveUploadedFiles(data.brandingGuidelinesFiles, label + " — Branding Guidelines");
+    const logoLinks = saveUploadedFiles(data.logoFiles, label + " — Logo");
+    const logoVariationLinks = saveUploadedFiles(data.logoVariationFiles, label + " — Logo Variations");
+    const photoLinks = saveUploadedFiles(data.productPhotographyFiles, label + " — Product Photography");
+
     const row = [
-      data.submittedAt || new Date().toISOString(),
+      stamp,
       data.clinicDoctorName || "",
       data.idealPatientDemographic || "",
       data.clinicServicesSpecialties || "",
@@ -89,11 +149,25 @@ function doPost(e) {
       data.newPatientsPerMonth || "",
       data.communicationStyle || "",
       data.activeOnline || "",
-      data.existingBranding || "",
+      data.hasBrandingGuidelines || "",
+      brandingLinks || data.brandingGuidelinesFileNames || "",
+      data.wantToChangeLogo || "",
+      logoLinks || data.logoFileNames || "",
+      data.hasLogoVariations || "",
+      logoVariationLinks || data.logoVariationFileNames || "",
+      data.brandPersonality || "",
       data.contentApprover || "",
       data.medicalPracticeUSP || "",
       data.uniqueProduct || "",
       data.brandProductStand || "",
+      data.likedBrandVisualStyles || "",
+      data.aiImagePreference || "",
+      data.dislikedPostStyles || "",
+      data.hasProductPhotography || "",
+      photoLinks || data.productPhotographyFileNames || "",
+      data.preferredVideoStyle || "",
+      data.videoElementsToAvoid || "",
+      data.logoFixedPositionInVideo || "",
       (data.onCameraTeamMembers || []).join(", "),
       data.filmingParticipantsNames || "",
       data.comfortableOnCamera || "",
